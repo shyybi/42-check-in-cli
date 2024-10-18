@@ -8,7 +8,6 @@ const path = require('path');
 const request = require('request');
 
 
-// PARAMS
 const config = require('./config.json');
 const UserA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.183 Safari/537.36";
 const login_url = "https://admissions.42.fr/users/sign_in";
@@ -24,7 +23,6 @@ async function main() {
     task.inscription2 = false;
     task.inscription3 = false;
 
-    // Charger les cookies depuis le fichier
     if (fs.existsSync(cookieFilePath)) {
         const cookiesData = JSON.parse(fs.readFileSync(cookieFilePath));
         cookiesData.forEach(cookieStr => {
@@ -33,18 +31,16 @@ async function main() {
         });
         console.log(chalk.white(`[${moment().format("HH:mm:ss")}] - Cookies chargés depuis le fichier.`));
         
-        // Vérifier si les cookies sont toujours valides
         const isValid = await checkCookiesValidity(task);
         if (isValid) {
             console.log(chalk.green(`[${moment().format("HH:mm:ss")}] - Cookies valides, pas besoin de se reconnecter.`));
-            task.monitor_url = login_url; // ou l'URL appropriée pour le monitoring
+            task.monitor_url = login_url;
             task.loop_monitor = true;
             while (task.loop_monitor) {
                 task.success = false;
-                await monitor(task, cookiesData);
-                // ... reste du code pour le monitoring ...
+                await monitor(task, cookiesData);.
             }
-            return; // Sortir de la fonction main si les cookies sont valides
+            return; 
         } else {
             console.log(chalk.yellow(`[${moment().format("HH:mm:ss")}] - Cookies expirés, nouvelle connexion nécessaire.`));
         }
@@ -56,7 +52,7 @@ async function main() {
         let cookies = await login(task);
         console.log(chalk.blue(`[${moment().format("HH:mm:ss")}] - Successful Login! cookie: ${cookies}`));
 
-        // Sauvegarder les cookies dans un fichier
+      
         fs.writeFileSync(cookieFilePath, JSON.stringify(cookies));
 
         task.loop_monitor = true;
@@ -78,7 +74,7 @@ async function main() {
 async function checkCookiesValidity(task) {
     return new Promise((resolve) => {
         const options = {
-            url: login_url, // ou une autre URL qui nécessite une authentification
+            url: login_url
             jar: task.jar,
             headers: {
                 'User-Agent': UserA
