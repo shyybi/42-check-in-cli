@@ -38,7 +38,7 @@ async function main() {
             task.loop_monitor = true;
             while (task.loop_monitor) {
                 task.success = false;
-                await monitor(task, cookiesData);.
+                await monitor(task, cookiesData);
             }
             return; 
         } else {
@@ -52,7 +52,6 @@ async function main() {
         let cookies = await login(task);
         console.log(chalk.blue(`[${moment().format("HH:mm:ss")}] - Successful Login! cookie: ${cookies}`));
 
-      
         fs.writeFileSync(cookieFilePath, JSON.stringify(cookies));
 
         task.loop_monitor = true;
@@ -74,7 +73,7 @@ async function main() {
 async function checkCookiesValidity(task) {
     return new Promise((resolve) => {
         const options = {
-            url: login_url
+            url: login_url,
             jar: task.jar,
             headers: {
                 'User-Agent': UserA
@@ -132,7 +131,10 @@ async function monitor(task, cookies) {
         while (loop) {
             console.log(`[${moment().format("HH:mm:ss")}] - Monitoring...`);
             task.counter++;
-            if (task.counter == 1000) console.clear(); task.counter = 1;
+            if (task.counter == 1000) {
+                console.clear();
+                task.counter = 1;
+            }
 
             const options = {
                 url: task.monitor_url,
